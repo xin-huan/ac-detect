@@ -1,4 +1,5 @@
 import os
+import pickle
 import time
 import shutil
 import numpy as np
@@ -127,6 +128,25 @@ def clear_face_database() -> dict:
         return {"status": "success", "message": "Face database cleared."}
     except Exception as e:
         return {"status": "error", "message": str(e)}
+
+
+@face_bp.route('/delete', methods=['POST'])
+def delete_face():
+    data = request.get_json(silent=True) or {}
+    name = (data.get('name') or '').strip()
+    if not name:
+        return jsonify({"status": "error", "message": "Missing name"}), 400
+    vectors = load_saved_vectors()
+    if name not in vectors:
+        return jsonify({"status": "error", "message": f"Student '{name}' not found in face database"}), 404
+    del vectors[name]
+    with open(VECTORS_FILE, "wb") as f:
+        pickle.dump(vectors, f)
+    clear_vectors_cache()
+    person_dir = os.path.join(DATABASE_ROOT, name)
+    if os.path.exists(person_dir):
+        shutil.rmtree(person_dir)
+    return jsonify({"status": "success", "message": f"Face enrollment deleted for {name}"}), 200
 
 
 @face_bp.route('/clear', methods=['POST'])

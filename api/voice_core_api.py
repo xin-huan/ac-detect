@@ -49,3 +49,16 @@ def enroll_voice_data(name: str, audio_path: str) -> dict:
 
 def get_all_enrolled_names() -> list:
     return list(get_voice_system().voiceprint_mgr.database.keys())
+
+
+def delete_voice_enrollment(name: str) -> dict:
+    name = name.strip()
+    if not name:
+        return {"status": "error", "message": "Name cannot be empty."}
+    mgr = get_voice_system().voiceprint_mgr
+    if name not in mgr.database:
+        return {"status": "error", "message": f"Student '{name}' not found in voice database."}
+    success = mgr.delete_student(name)
+    if success:
+        return {"status": "success", "message": f"Voice enrollment deleted for {name}."}
+    return {"status": "error", "message": f"Failed to delete voice enrollment for {name}."}

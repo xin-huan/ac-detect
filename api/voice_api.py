@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename
 from pydub import AudioSegment
 from dotenv import load_dotenv
 
-from api.voice_core_api import enroll_voice_data, get_voice_system, get_voice_config
+from api.voice_core_api import enroll_voice_data, get_voice_system, get_voice_config, delete_voice_enrollment
 
 load_dotenv()
 
@@ -71,6 +71,16 @@ def enroll_voice():
         for p in (temp_path, temp_wav_path):
             if p and os.path.exists(p):
                 os.remove(p)
+
+
+@voice_bp.route('/delete', methods=['POST'])
+def delete_voice():
+    data = request.get_json(silent=True) or {}
+    name = (data.get('name') or '').strip()
+    if not name:
+        return jsonify({"status": "error", "message": "缺少姓名参数"}), 400
+    result = delete_voice_enrollment(name)
+    return jsonify(result), 200 if result['status'] == 'success' else 500
 
 
 @voice_bp.route('/transcribe', methods=['POST'])
