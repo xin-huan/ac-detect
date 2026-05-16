@@ -1,0 +1,35 @@
+# ac-detect 统一环境依赖清单
+# 推荐通过 Conda 安装，不要单独 pip install -r requirements.txt
+#
+#   conda activate ac_detect
+#   # 或首次: powershell -File scripts/setup_env.ps1
+#
+# 完整锁定版本见 envs/ac_detect.yml（由 env_ac 验证通过）
+
+# Web
+flask>=3.1
+flask-cors>=6.0
+python-dotenv>=1.2
+
+# 视觉
+insightface==0.7.3
+onnxruntime>=1.16
+opencv-python>=4.8,<4.13
+ultralytics>=8.3
+numpy==1.26.4
+pillow>=10.4
+
+# 语音 (需 HF_TOKEN)
+openai-whisper>=20230314
+pyannote.audio>=3.1.1
+pydub>=0.25.1
+librosa>=0.10
+soundfile>=0.12
+
+# HuggingFace — 须 <1.0，否则 pyannote 3.1.x 的 use_auth_token 会报错
+huggingface-hub==0.23.5
+
+# PyTorch — 由 conda 安装 torch==2.0.1 (CPU 或 CUDA 11.8)
+# torch==2.0.1
+# torchaudio==2.0.2
+# torchvision==0.15.2

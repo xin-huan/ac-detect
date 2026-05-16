@@ -1,0 +1,34 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Secrets
+.env
+.env.*
+**/.env
+!.env.example
+!**/.env.example
+
+# Runtime / outputs
+uploads/
+temp/
+temp_analysis_uploads/
+outputs/
+result/
+voice_database.pkl
+*.wav
+temp_segment.wav
+
+# Large models
+best.pt
+*.pt
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,380 @@
+{
+  "message": "Integrated analysis successful.",
+  "result": {
+    "students": [
+      {
+        "behavior_events": [
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:32.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:35.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:38.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:41.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:41.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:41.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:41.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:41.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:41.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:41.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:41.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:41.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:44.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.30",
+            "name": "\u65e0\u5173\u8054\u884c\u4e3a",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          },
+          {
+            "detail": "Weight: 0.70",
+            "name": "stand",
+            "time": "2026-05-16 16:21:47.620"
+          }
+        ],
+        "concentration_score": 70,
+        "name": "\u672a\u77e5\u4eba\u7269",
+        "speech_content": "======================================================================\n\u8bed\u97f3\u8bc6\u522b\u7ed3\u679c\n======================================================================\n\n[00:00.11-->00:01.99] [\u672a\u77e5\u5b66\u751f] \u5927\u5bb6\u6709\u4e0d\u671f\u5f85\u770b\u770b,\n[00:01.99-->00:02.28] [SPEAKER_01] \u6b22\u8fce\n[00:02.28-->00:04.83] [\u672a\u77e5\u5b66\u751f] \u670b\u53cb\u53bb\u7559\u8a00\u573a\u9762\u3002\n[00:02.30-->00:03.12] [SPEAKER_01] \u670b\u53cb\u53bb\u7559\u8a00\u573a\n"
+      }
+    ],
+    "summary": {
+      "attendance": {
+        "present": [
+          "\u672a\u77e5\u4eba\u7269"
+        ],
+        "total": 1
+      },
+      "average_score": 58,
+      "full_transcript": "======================================================================\n\u8bed\u97f3\u8bc6\u522b\u7ed3\u679c\n======================================================================\n\n[00:00.11-->00:01.99] [\u672a\u77e5\u5b66\u751f] \u5927\u5bb6\u6709\u4e0d\u671f\u5f85\u770b\u770b,\n[00:01.99-->00:02.28] [SPEAKER_01] \u6b22\u8fce\n[00:02.28-->00:04.83] [\u672a\u77e5\u5b66\u751f] \u670b\u53cb\u53bb\u7559\u8a00\u573a\u9762\u3002\n[00:02.30-->00:03.12] [SPEAKER_01] \u670b\u53cb\u53bb\u7559\u8a00\u573a\n"
+    }
+  },
+  "status": "success"
+}

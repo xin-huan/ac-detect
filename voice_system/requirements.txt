@@ -1,0 +1,84 @@
+# ===================================================================
+# 语音识别系统依赖 (env_yolo 环境专用版)
+# ===================================================================
+#
+# 说明：
+# - 本文件包含所有必需的依赖，包括 PyTorch 三件套
+# - PyTorch 版本必须严格匹配 env_yolo.yml，以确保 CUDA 11.8 兼容
+# - 如果 env_yolo 中已安装相同版本，pip 会自动跳过重复安装
+# - 如果版本不匹配，pip 会重新安装正确的版本
+# ===================================================================
+#
+# 安装方法：
+#   conda activate env_yolo
+#   pip install -r requirements.txt
+#
+# ===================================================================
+
+# ===== 核心语音识别库 =====
+
+# Whisper (语音转文字)
+openai-whisper>=20230314
+
+# Pyannote.audio (说话人分离 + 声纹提取)
+pyannote.audio>=3.1.0
+
+# ===== PyTorch 相关 (强制使用env_yolo中的版本) =====
+# 注意：必须严格按照env_yolo.yml中的版本安装，以确保CUDA 11.8兼容
+#torch==2.0.1
+#torchaudio==2.0.2
+#torchvision==0.15.2
+
+# ===== 音频处理 =====
+
+# FFmpeg Python绑定
+ffmpeg-python>=0.2.0
+
+# 音频操作库
+pydub>=0.25.1
+
+# ===== 数据处理 =====
+# 注意：numpy版本必须与env_yolo一致
+numpy==1.26.4
+
+# 科学计算库
+scipy>=1.10.0
+
+# ===== Pyannote.audio 的额外依赖 =====
+
+# 音频特征提取
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# HuggingFace 相关
+huggingface-hub>=0.20.0
+pytorch-metric-learning>=2.0.0
+
+# 语音处理
+speechbrain>=0.5.16
+
+# ===== 工具库 =====
+
+# 进度条 (Whisper和Pyannote都需要)
+tqdm>=4.65.0
+
+# YAML配置 (Pyannote使用)
+PyYAML>=6.0
+
+# 音频I/O
+audioread>=3.0.0
+
+# 类型检查
+typing-extensions>=4.5.0
+
+# ===== 可选但推荐 =====
+
+# 加速音频重采样
+resampy>=0.4.2
+
+# 改进的进度条
+rich>=13.0.0
+
+# python-dotenv
+python-dotenv
+
