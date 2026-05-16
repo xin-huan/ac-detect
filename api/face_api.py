@@ -2,17 +2,18 @@ import os
 import pickle
 import time
 import shutil
+import glob
 import numpy as np
 import cv2
 from PIL import Image
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
 from werkzeug.utils import secure_filename
 
 from face_common import (
     DATABASE_ROOT, VECTORS_FILE, get_face_app,
     load_saved_vectors, save_vector, clear_vectors_cache,
 )
-from api.voice_core_api import get_all_enrolled_names
+from api.voice_core_api import get_all_enrolled_names, delete_voice_enrollment
 
 face_bp = Blueprint('face_api', __name__, url_prefix='/api/face')
 UPLOAD_FOLDER = 'uploads'
@@ -147,6 +148,58 @@ def delete_face():
     if os.path.exists(person_dir):
         shutil.rmtree(person_dir)
     return jsonify({"status": "success", "message": f"Face enrollment deleted for {name}"}), 200
+
+
+@face_bp.route('/photo/<name>', methods=['GET'])
+def get_photo(name):
+    """获取学生最新的人脸照片"""
+    person_dir = os.path.join(DATABASE_ROOT, name.strip())
+    if not os.path.isdir(person_dir):
+        return jsonify({"status": "error", "message": "Student not found"}), 404
+    photos = sorted(glob.glob(os.path.join(person_dir, "*.jpg")), key=os.path.getmtime, reverse=True)
+    if not photos:
+        return jsonify({"status": "error", "message": "No photo found"}), 404
+    return send_file(photos[0], mimetype='image/jpeg')
+
+
+@face_bp.route('/delete-student', methods=['POST'])
+def delete_student():
+    """删除学生全部档案（人脸 + 声纹）"""
+    data = request.get_json(silent=True) or {}
+    name = (data.get('name') or '').strip()
+    if not name:
+        return jsonify({"status": "error", "message": "Missing name"}), 400
+
+    face_deleted = False
+    voice_deleted = False
+
+    # 删除人脸
+    vectors = load_saved_vectors()
+    if name in vectors:
+        del vectors[name]
+        with open(VECTORS_FILE, "wb") as f:
+            pickle.dump(vectors, f)
+        clear_vectors_cache()
+        face_deleted = True
+    person_dir = os.path.join(DATABASE_ROOT, name)
+    if os.path.exists(person_dir):
+        shutil.rmtree(person_dir)
+
+    # 删除声纹
+    try:
+        result = delete_voice_enrollment(name)
+        voice_deleted = result.get("status") == "success"
+    except Exception:
+        voice_deleted = False
+
+    if face_deleted or voice_deleted:
+        return jsonify({
+            "status": "success",
+            "message": f"Student '{name}' deleted (face: {face_deleted}, voice: {voice_deleted})",
+            "face_deleted": face_deleted,
+            "voice_deleted": voice_deleted,
+        }), 200
+    return jsonify({"status": "error", "message": f"Student '{name}' not found in any database"}), 404
 
 
 @face_bp.route('/clear', methods=['POST'])

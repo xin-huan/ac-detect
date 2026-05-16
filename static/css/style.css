@@ -1,0 +1,276 @@
+/* ===== CSS Custom Properties ===== */
+:root {
+    --glass-bg: rgba(255,255,255,0.72);
+    --glass-border: rgba(255,255,255,0.3);
+    --glass-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    --glass-blur: 12px;
+    --toast-offset: 1.5rem;
+    --header-height: 4.5rem;
+    --radius-card: 1rem;
+    --radius-btn: 0.5rem;
+}
+.dark {
+    --glass-bg: rgba(31,41,55,0.78);
+    --glass-border: rgba(75,85,99,0.3);
+    --glass-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+/* ===== Keyframes ===== */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+}
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(120%); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideOutRight {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(120%); }
+}
+@keyframes countUpPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); }
+}
+@keyframes confettiFall {
+    0%   { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    html { scroll-behavior: auto; }
+}
+
+/* ===== Base Styles ===== */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--header-height);
+}
+body {
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    background-color: #f9fafb;
+    transition: background-color 0.3s, color 0.3s;
+}
+.dark body, body.dark-bg {
+    background-color: #111827;
+}
+
+/* ===== Focus Visible ===== */
+*:focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+.dark *:focus-visible {
+    outline-color: #818cf8;
+}
+
+/* ===== Touch ===== */
+button, label[role="button"], [role="button"] {
+    touch-action: manipulation;
+}
+
+/* ===== Glass Card ===== */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-card);
+}
+@supports not (backdrop-filter: blur(1px)) {
+    .glass-card {
+        background: rgba(255,255,255,0.92);
+    }
+    .dark .glass-card {
+        background: rgba(31,41,55,0.92);
+    }
+}
+
+/* ===== Skeleton Loading ===== */
+.skeleton {
+    background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+    background-size: 400px 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 0.25rem;
+}
+.dark .skeleton {
+    background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+    background-size: 400px 100%;
+}
+
+/* ===== Toast System ===== */
+#toast-container {
+    position: fixed;
+    bottom: var(--toast-offset);
+    right: var(--toast-offset);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+    max-width: 24rem;
+    pointer-events: none;
+}
+.toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.16);
+    animation: slideInRight 0.35s ease-out forwards;
+    backdrop-filter: blur(12px);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.toast.removing {
+    animation: slideOutRight 0.3s ease-in forwards;
+}
+.toast-success { background: rgba(16,185,129,0.94); color: white; }
+.toast-error   { background: rgba(239,68,68,0.95); color: white; }
+.toast-warning { background: rgba(245,158,11,0.94); color: #1f2937; }
+.toast-info    { background: rgba(79,70,229,0.94); color: white; }
+.toast-progress {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 0 0 0.75rem 0.75rem;
+}
+
+/* ===== Dark Mode Toggle ===== */
+#dark-mode-toggle {
+    width: 2.5rem; height: 2.5rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent;
+    transition: background-color 0.2s, color 0.2s;
+}
+#dark-mode-toggle:hover { background: rgba(0,0,0,0.06); }
+.dark #dark-mode-toggle:hover { background: rgba(255,255,255,0.1); }
+
+/* ===== Scroll Containers ===== */
+.scrollable-container {
+    overscroll-behavior: contain;
+}
+
+/* ===== Hide native inputs ===== */
+#video-upload, #face-file-upload, #voice-file-upload {
+    display: none;
+}
+
+/* ===== Camera snapshot ===== */
+#webcam-video-face, #snapshot-image-face {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Utility ===== */
+.score-low { color: #f87171; }
+.score-medium { color: #facc15; }
+.score-high { color: #10b981; }
+
+.transition-width {
+    transition-property: width;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 700ms;
+}
+
+/* ===== Tab Navigation ===== */
+.tab-btn {
+    position: relative;
+    padding: 0.875rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #6b7280;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.tab-btn:hover { color: #4f46e5; background: rgba(79,70,229,0.04); }
+.tab-btn.active { color: #4f46e5; border-bottom-color: #4f46e5; }
+.dark .tab-btn { color: #9ca3af; }
+.dark .tab-btn:hover { color: #818cf8; }
+.dark .tab-btn.active { color: #818cf8; border-bottom-color: #818cf8; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeIn 0.35s ease-out forwards; }
+
+/* ===== Phase Indicator ===== */
+.phase-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    position: relative;
+}
+.phase-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+.phase-dot {
+    width: 0.875rem; height: 0.875rem;
+    border-radius: 50%;
+    background: #d1d5db;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+.dark .phase-dot { background: #4b5563; }
+.phase-dot.active { background: #4f46e5; box-shadow: 0 0 0 4px rgba(79,70,229,0.2); }
+.phase-dot.done { background: #10b981; }
+.phase-label {
+    font-size: 0.7rem; color: #9ca3af; margin-top: 0.25rem;
+    text-align: center; max-width: 5rem;
+    transition: color 0.3s;
+}
+.phase-label.active { color: #4f46e5; font-weight: 600; }
+.dark .phase-label.active { color: #818cf8; }
+
+/* ===== Report Card Hover ===== */
+.report-summary-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.report-summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+.dark .report-summary-card:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+/* ===== Student Card ===== */
+.student-card-toggle {
+    cursor: pointer;
+    user-select: none;
+}
+.student-card-toggle:hover .collapse-icon {
+    color: #4f46e5;
+}
+
+/* ===== Archive Table ===== */
+.archive-table th { font-weight: 600; text-align: left; padding: 0.75rem 1rem; }
+.archive-table td { padding: 0.75rem 1rem; }
+.archive-row { transition: background 0.15s; cursor: pointer; }
+.archive-row:hover { background: rgba(79,70,229,0.04); }
+.dark .archive-row:hover { background: rgba(129,140,248,0.06); }

@@ -1,4 +1,6 @@
 import os
+import pickle
+
 from voice_system import VoiceRecognitionSystem, Config
 from voice_system.hf_utils import ensure_hf_login, patch_hf_hub_download
 
@@ -8,9 +10,27 @@ from dotenv import load_dotenv
 load_dotenv()
 
 HF_TOKEN = os.getenv('HF_TOKEN')
+VOICE_DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'voice_database.pkl')
 
 _config = None
 _system = None
+
+
+def _load_voice_db_safe() -> dict:
+    """直接读取声纹数据库文件，不初始化任何 ML 模型"""
+    if os.path.exists(VOICE_DB_PATH):
+        try:
+            with open(VOICE_DB_PATH, 'rb') as f:
+                return pickle.load(f)
+        except Exception:
+            return {}
+    return {}
+
+
+def _save_voice_db_safe(db: dict) -> None:
+    """直接写入声纹数据库文件"""
+    with open(VOICE_DB_PATH, 'wb') as f:
+        pickle.dump(db, f)
 
 
 def get_voice_config() -> Config:
@@ -48,17 +68,30 @@ def enroll_voice_data(name: str, audio_path: str) -> dict:
 
 
 def get_all_enrolled_names() -> list:
-    return list(get_voice_system().voiceprint_mgr.database.keys())
+    """获取声纹库学生名单（仅读磁盘，不加载 ML 模型）"""
+    return list(_load_voice_db_safe().keys())
 
 
 def delete_voice_enrollment(name: str) -> dict:
+    """删除声纹录入（优先使用内存中的 voice_system，否则直接操作磁盘）"""
     name = name.strip()
     if not name:
         return {"status": "error", "message": "Name cannot be empty."}
-    mgr = get_voice_system().voiceprint_mgr
-    if name not in mgr.database:
+
+    # 如果 voice system 已初始化，使用它（数据库已在内存中）
+    if _system is not None:
+        mgr = _system.voiceprint_mgr
+        if name not in mgr.database:
+            return {"status": "error", "message": f"Student '{name}' not found in voice database."}
+        success = mgr.delete_student(name)
+        if success:
+            return {"status": "success", "message": f"Voice enrollment deleted for {name}."}
+        return {"status": "error", "message": f"Failed to delete voice enrollment for {name}."}
+
+    # 否则直接操作磁盘文件
+    db = _load_voice_db_safe()
+    if name not in db:
         return {"status": "error", "message": f"Student '{name}' not found in voice database."}
-    success = mgr.delete_student(name)
-    if success:
-        return {"status": "success", "message": f"Voice enrollment deleted for {name}."}
-    return {"status": "error", "message": f"Failed to delete voice enrollment for {name}."}
+    del db[name]
+    _save_voice_db_safe(db)
+    return {"status": "success", "message": f"Voice enrollment deleted for {name}."}

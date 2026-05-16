@@ -73,27 +73,63 @@ python yolo_main_analysis.py testvideo/你的视频.mp4
 
 ```
 ac-detect/
-│
-├── app.py                     # Flask 主程序入口（这个后面我写）
-│
-├── api/                       # 所有后端 API 接口文件
+├── api/                          # 后端 API 接口
 │   ├── __init__.py
-│   ├── voice_api.py           # 声纹识别相关接口
-│
-├── envs/                      # 环境
-│   ├── 
-│   └── 
-├── insightface-master/          # 人脸识别模块核心逻辑（特征提取、数据库管理等）
-    ├── face_database/            
-│   ├──face_vectors.pkl         
-│    
-├── result/              # 识别结果
-│   ├─
-├── testvideo/              # 检测的视频
-│   ├─
-├── ultralytics/              # 行为识别模块核心逻辑（目标检测）
-│   ├─
-├── voice_system/              # 声纹识别模块核心逻辑（特征提取、数据库管理等）
-│   ├── 
-            # 前端页面模板（HTML）
+│   ├── face_api.py               # 人脸识别相关接口
+│   ├── voice_api.py              # 声纹识别相关接口
+│   ├── voice_core_api.py         # 声纹核心接口
+│   ├── integrated_analysis_api.py # 综合分析接口
+│   └── score_api.py              # 评分接口
+├── app.py                        # Flask Web 主程序入口
+├── face_common.py                # 人脸识别通用函数
+├── face_worker.py                # 人脸识别后台工作线程
+├── yolo_main_analysis.py         # 命令行视频分析入口
+├── compute_attention_score.py    # 注意力评分计算
+├── best.pt                       # YOLO 行为检测模型权重
+├── voice_database.pkl            # 声纹特征数据库
+├── insightface-master/           # 人脸识别模块（特征提取、数据库管理）
+│   ├── face_database/            # 已注册人脸库
+│   │   ├── 234/
+│   │   ├── Papi/
+│   │   └── 罗翔/
+│   └── face_vectors.pkl          # 人脸特征向量
+├── ultralytics/                  # YOLO 行为识别模块（目标检测）
+├── voice_system/                 # 声纹识别模块（特征提取、声纹库管理）
+│   ├── voice_recognition_system.py
+│   ├── audio_extractor.py        # 音频提取
+│   ├── cli.py                    # 命令行工具
+│   ├── config.py                 # 配置
+│   ├── diarizer.py               # 说话人分离
+│   ├── enroll_voiceprints.py     # 声纹注册
+│   ├── hf_utils.py               # HuggingFace 工具
+│   ├── merger.py                 # 结果合并
+│   ├── transcriber.py            # 语音转文字
+│   ├── voiceprint_manager.py     # 声纹库管理
+│   ├── examples/                 # 示例
+│   └── voice_samples/            # 声纹样本
+├── static/                       # 前端静态资源
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       ├── analysis.js           # 分析页面逻辑
+│       ├── archive.js            # 存档页面逻辑
+│       ├── common.js             # 公共函数
+│       └── enroll.js             # 注册页面逻辑
+├── system.html                   # 前端主页面
+├── envs/                         # Conda 环境配置文件
+├── scripts/                      # 辅助脚本
+│   ├── setup_env.ps1             # 环境安装脚本
+│   └── push_to_github.ps1        # 推送脚本
+├── docs/                         # 文档
+│   └── 优化方案.md
+├── uploads/                      # 上传文件目录
+├── temp/                         # 临时文件目录
+├── temp_analysis_uploads/        # 分析临时上传目录
+├── result/                       # 检测结果输出目录
+├── testvideo/                    # 测试视频存放目录
+├── outputs/                      # 输出目录
+├── requirements.txt              # Python 依赖
+├── .env.example                  # 环境变量示例
+├── .gitignore
+└── README.md
 ```
