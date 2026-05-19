@@ -18,6 +18,8 @@ function renderReport(report) {
     window.reportData = report;
     var downloadReportBtn = document.getElementById('download-report-btn');
     if (downloadReportBtn) { downloadReportBtn.disabled = false; }
+    var printReportBtn = document.getElementById('print-report-btn');
+    if (printReportBtn) { printReportBtn.disabled = false; }
 
     var summary = report.summary || {};
     var students = report.students || [];
@@ -241,6 +243,180 @@ function animateAttendanceCounter(element, present, total, duration) {
 }
 
 // ============================================================
+// 打印 / 导出 PDF
+// ============================================================
+function printReport() {
+    if (!reportData) {
+        showStatus('没有可打印的分析报告。请先运行分析。', 'warning');
+        return;
+    }
+
+    var summary = reportData.summary || {};
+    var students = reportData.students || [];
+    var presentStudents = summary.attendance ? summary.attendance.present || [] : [];
+    var totalStudents = summary.attendance ? summary.attendance.total || 0 : 0;
+    var averageScore = summary.average_score || 0;
+    var avgText = averageScore >= 80 ? '高' : (averageScore >= 60 ? '中' : (averageScore > 0 ? '低' : 'N/A'));
+    var transcript = summary.full_transcript || '未识别到任何课堂语音内容。';
+
+    var videoFileNameText = document.getElementById('video-file-name').textContent.replace(/\\.[^/.]+$/, "");
+
+    var html = '<h1>📊 课堂分析报告</h1>';
+    html += '<p style="font-size:10pt;color:#6b7280;margin-bottom:12pt;">视频: ' + videoFileNameText + ' | 生成时间: ' + new Date().toLocaleString() + '</p>';
+
+    // 摘要卡片
+    html += '<div class="print-summary-cards">';
+    html += '<div class="print-card"><div class="label">考勤统计</div><div class="value">' + presentStudents.length + ' / ' + totalStudents + '</div><div style="font-size:9pt;color:#6b7280;">人到课</div></div>';
+    html += '<div class="print-card"><div class="label">平均专注度</div><div class="value">' + averageScore + '<span style="font-size:10pt;font-weight:400;">/100</span></div><div style="font-size:9pt;">' + avgText + '</div></div>';
+    html += '<div class="print-card"><div class="label">检测学生数</div><div class="value">' + students.length + '</div><div style="font-size:9pt;color:#6b7280;">人</div></div>';
+    html += '</div>';
+
+    // 到课名单
+    html += '<h2>📋 考勤详情</h2>';
+    html += '<p style="font-size:10pt;">到课学生: ' + (presentStudents.join(', ') || '无') + '</p>';
+
+    // 学生详细报告
+    html += '<h2>🎯 学生详细报告 (' + students.length + ' 人)</h2>';
+    students.forEach(function(s) {
+        var score = s.concentration_score || 0;
+        var scoreText = score >= 80 ? '高' : (score >= 60 ? '中' : '低');
+        var scoreColor = score >= 80 ? '#10b981' : (score >= 60 ? '#eab308' : '#ef4444');
+        var events = s.behavior_events || [];
+        var speech = s.speech_content || '该学生在视频中未检测到发言。';
+        var photoUrl = API_BASE + '/face/photo/' + encodeURIComponent(s.name);
+
+        html += '<div class="student-print-row">';
+        html += '<img src="' + photoUrl + '" alt="' + s.name + '" class="avatar" onerror="this.style.display=\'none\'">';
+        html += '<div class="info">';
+        html += '<span class="name">' + (s.name || '未知学生') + '</span>';
+        html += '<span class="score-badge" style="background:' + scoreColor + ';">' + score + ' 分 · ' + scoreText + '</span>';
+        if (events.length > 0) {
+            html += '<div class="events">📌 行为记录: ' + events.map(function(e) { return e.time + ' ' + e.name; }).join('、') + '</div>';
+        }
+        if (speech && speech.indexOf('未检测到发言') === -1) {
+            html += '<div class="speech">💬 发言: ' + speech.substring(0, 200) + (speech.length > 200 ? '...' : '') + '</div>';
+        }
+        html += '</div></div>';
+    });
+
+    // 完整转录
+    html += '<h2>📢 课堂语音转录</h2>';
+    html += '<div class="transcript-block">' + transcript.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+
+    document.getElementById('print-report-content').innerHTML = html;
+    document.getElementById('print-report').style.display = 'block';
+
+    setTimeout(function() {
+        window.print();
+        setTimeout(function() {
+            document.getElementById('print-report').style.display = 'none';
+        }, 500);
+    }, 300);
+}
+
+// ============================================================
+// 历史报告加载
+// ============================================================
+async function loadHistory() {
+    var loading = document.getElementById('history-loading');
+    var empty = document.getElementById('history-empty');
+    var list = document.getElementById('history-list');
+
+    loading.classList.remove('hidden');
+    empty.classList.add('hidden');
+    list.classList.add('hidden');
+
+    try {
+        var resp = await fetch(API_BASE + '/analysis/history');
+        var data = await resp.json();
+        loading.classList.add('hidden');
+
+        if (data.status !== 'success' || !data.reports || data.reports.length === 0) {
+            empty.classList.remove('hidden');
+            return;
+        }
+
+        list.classList.remove('hidden');
+        list.innerHTML = '';
+        data.reports.forEach(function(r) {
+            var date = new Date(r.timestamp * 1000).toLocaleString('zh-CN');
+            var avgColor = r.average_score >= 80 ? 'text-green-600' : (r.average_score >= 60 ? 'text-yellow-600' : 'text-red-500');
+            var item = document.createElement('div');
+            item.className = 'glass-card p-4 flex items-center justify-between hover:shadow-md transition-shadow cursor-pointer';
+            item.innerHTML = '<div class="flex-1 min-w-0">' +
+                '<h4 class="font-semibold text-gray-900 dark:text-gray-100 truncate">🎬 ' + (r.video_name || '未知视频') + '</h4>' +
+                '<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">' + date + ' · ' + r.student_count + ' 位学生 · 考勤 ' + r.attendance_present + '/' + r.attendance_total + '</p>' +
+                '</div>' +
+                '<div class="flex items-center gap-3 flex-shrink-0 ml-4">' +
+                    '<span class="text-lg font-extrabold ' + avgColor + '">' + r.average_score + '<span class="text-xs font-normal text-gray-400">/100</span></span>' +
+                    '<button class="text-primary hover:text-primary-dark text-sm font-medium history-view-btn" data-video="' + r.video_name + '">📄 查看</button>' +
+                    '<button class="text-red-500 hover:text-red-700 text-sm history-delete-btn" data-video="' + r.video_name + '">🗑️</button>' +
+                '</div>';
+            item.addEventListener('click', function(e) {
+                if (e.target.classList.contains('history-view-btn') || e.target.classList.contains('history-delete-btn')) return;
+                var vname = this.querySelector('.history-view-btn').getAttribute('data-video');
+                if (vname) viewHistoryReport(vname);
+            });
+            list.appendChild(item);
+        });
+
+        // 绑定按钮事件
+        document.querySelectorAll('.history-view-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                viewHistoryReport(this.getAttribute('data-video'));
+            });
+        });
+        document.querySelectorAll('.history-delete-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var vname = this.getAttribute('data-video');
+                deleteHistoryReport(vname);
+            });
+        });
+    } catch (e) {
+        loading.classList.add('hidden');
+        empty.classList.remove('hidden');
+        empty.querySelector('p').textContent = '加载历史报告失败: ' + e.message;
+    }
+}
+
+async function viewHistoryReport(videoName) {
+    try {
+        showStatus('正在加载历史报告: ' + videoName + '...', 'info');
+        var resp = await fetch(API_BASE + '/analysis/report/' + encodeURIComponent(videoName));
+        var data = await resp.json();
+        if (data.status === 'success' && data.result) {
+            reportData = data.result;
+            document.getElementById('video-file-name').textContent = videoName + ' (历史)';
+            renderReport(data.result);
+            document.getElementById('report-content').scrollIntoView({ behavior: 'smooth' });
+            showStatus('已加载历史报告: ' + videoName, 'success');
+        } else {
+            showStatus('加载失败: ' + (data.message || '未知错误'), 'error');
+        }
+    } catch (e) {
+        showStatus('网络错误: ' + e.message, 'error');
+    }
+}
+
+async function deleteHistoryReport(videoName) {
+    if (!confirm('确认删除 "' + videoName + '" 的历史分析报告吗？')) return;
+    try {
+        var resp = await fetch(API_BASE + '/analysis/report/' + encodeURIComponent(videoName), { method: 'DELETE' });
+        var data = await resp.json();
+        if (resp.ok && data.status === 'success') {
+            showStatus('已删除报告: ' + videoName, 'success');
+            loadHistory();
+        } else {
+            showStatus('删除失败: ' + (data.message || '未知错误'), 'error');
+        }
+    } catch (e) {
+        showStatus('网络错误: ' + e.message, 'error');
+    }
+}
+
+// ============================================================
 // 报告下载
 // ============================================================
 function downloadReport() {
@@ -273,6 +449,8 @@ async function startAnalysis() {
 
     var downloadReportBtn = document.getElementById('download-report-btn');
     if (downloadReportBtn) { downloadReportBtn.disabled = true; }
+    var printReportBtn = document.getElementById('print-report-btn');
+    if (printReportBtn) { printReportBtn.disabled = true; }
     reportData = null;
 
     var startBtn = document.getElementById('start-analysis');
@@ -361,6 +539,7 @@ async function startAnalysis() {
             if (data.result) {
                 reportData = data.result;
                 renderReport(data.result);
+                loadHistory();
                 celebrateIfAllowed();
             } else {
                 showStatus('分析成功，但后端未返回完整的报告数据 (data.result 缺失)。', 'warning');
@@ -410,3 +589,4 @@ if (downloadReportBtn) {
 
 // 初始调用
 updateEnrollStatusHint();
+loadHistory();

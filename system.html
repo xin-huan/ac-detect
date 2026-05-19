@@ -276,6 +276,23 @@
                     <div class="skeleton h-56 rounded-xl mb-6"></div>
                 </div>
 
+                <!-- 历史报告区域 -->
+                <div id="history-section" class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">📂 历史分析报告</h2>
+                        <button id="refresh-history-btn" class="py-2 px-4 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-dark transition-all active:scale-[0.98]" onclick="loadHistory()">🔄 刷新</button>
+                    </div>
+                    <div id="history-loading" class="text-center py-6 text-gray-500 dark:text-gray-400 hidden">
+                        <div class="skeleton h-6 w-48 mx-auto rounded"></div>
+                    </div>
+                    <div id="history-empty" class="text-center py-10 text-gray-400 dark:text-gray-500 border border-dashed border-gray-300 dark:border-gray-600 rounded-xl">
+                        <p class="text-4xl mb-2">📭</p>
+                        <p>暂无历史分析报告</p>
+                        <p class="text-sm mt-1">完成视频分析后，报告将自动保存在这里</p>
+                    </div>
+                    <div id="history-list" class="space-y-3 hidden"></div>
+                </div>
+
                 <!-- 报告区域 -->
                 <div id="report-container" class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
                     <p id="no-report-message" class="text-center text-xl text-gray-400 dark:text-gray-500 py-10 border border-dashed border-gray-300 dark:border-gray-600 rounded-xl">
@@ -302,10 +319,16 @@
 
                             <div class="report-summary-card glass-card p-6 border-l-4 border-primary flex flex-col justify-center">
                                 <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">报告操作</p>
-                                <button id="download-report-btn" class="w-full bg-primary text-white py-2.5 px-4 rounded-lg font-semibold hover:bg-primary-dark hover:shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                    下载分析报告 (.json)
-                                </button>
+                                <div class="space-y-2">
+                                    <button id="print-report-btn" class="w-full bg-accent text-white py-2.5 px-4 rounded-lg font-semibold hover:bg-accent-dark hover:shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed" disabled onclick="printReport()">
+                                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                                        🖨️ 打印 / 导出 PDF
+                                    </button>
+                                    <button id="download-report-btn" class="w-full bg-primary text-white py-2.5 px-4 rounded-lg font-semibold hover:bg-primary-dark hover:shadow-lg transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                        下载报告数据 (.json)
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -337,6 +360,11 @@
         </div>
 
     </main>
+
+    <!-- 打印友好版报告（屏幕隐藏，打印时可见） -->
+    <div id="print-report" class="print-only" style="display:none;">
+        <div id="print-report-content"></div>
+    </div>
 
     <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;display:none;"></canvas>
 

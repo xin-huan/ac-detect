@@ -274,3 +274,133 @@ button, label[role="button"], [role="button"] {
 .archive-row { transition: background 0.15s; cursor: pointer; }
 .archive-row:hover { background: rgba(79,70,229,0.04); }
 .dark .archive-row:hover { background: rgba(129,140,248,0.06); }
+
+/* ===== Print-Friendly Report ===== */
+@media print {
+    /* 隐藏一切非报告元素 */
+    body > *:not(#print-report),
+    header, nav, .tab-btn, .tab-panel,
+    #toast-container, #confetti-canvas,
+    #dark-mode-toggle, #report-skeleton,
+    #analysis-progress, #history-section,
+    #student-report-toolbar,
+    #download-report-btn, #print-report-btn {
+        display: none !important;
+    }
+
+    #print-report {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: white !important;
+        color: #111827 !important;
+        font-size: 12pt;
+    }
+
+    #print-report * {
+        color: #111827 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        border-color: #d1d5db !important;
+    }
+
+    #print-report h1 { font-size: 20pt; margin-bottom: 4pt; }
+    #print-report h2 { font-size: 16pt; margin-top: 16pt; margin-bottom: 8pt; border-bottom: 2px solid #374151; padding-bottom: 4pt; }
+    #print-report h3 { font-size: 13pt; margin-bottom: 4pt; }
+    #print-report h4 { font-size: 11pt; margin-bottom: 4pt; }
+
+    #print-report .print-summary-cards {
+        display: flex;
+        gap: 12pt;
+        margin-bottom: 16pt;
+    }
+
+    #print-report .print-card {
+        flex: 1;
+        border: 1.5px solid #9ca3af;
+        border-radius: 6pt;
+        padding: 10pt 12pt;
+        text-align: center;
+    }
+
+    #print-report .print-card .label {
+        font-size: 9pt;
+        color: #6b7280 !important;
+        margin-bottom: 4pt;
+    }
+
+    #print-report .print-card .value {
+        font-size: 18pt;
+        font-weight: 800;
+    }
+
+    #print-report .student-print-row {
+        border: 1px solid #d1d5db;
+        border-radius: 6pt;
+        padding: 10pt 12pt;
+        margin-bottom: 8pt;
+        page-break-inside: avoid;
+        display: flex;
+        align-items: flex-start;
+        gap: 10pt;
+    }
+
+    #print-report .student-print-row .avatar {
+        width: 40pt;
+        height: 40pt;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #4f46e5;
+        flex-shrink: 0;
+    }
+
+    #print-report .student-print-row .info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    #print-report .student-print-row .name {
+        font-size: 13pt;
+        font-weight: 700;
+    }
+
+    #print-report .student-print-row .score-badge {
+        display: inline-block;
+        padding: 2pt 10pt;
+        border-radius: 12pt;
+        font-size: 10pt;
+        font-weight: 700;
+        color: white !important;
+        margin-left: 6pt;
+    }
+
+    #print-report .student-print-row .events,
+    #print-report .student-print-row .speech {
+        font-size: 9pt;
+        margin-top: 4pt;
+        color: #4b5563 !important;
+    }
+
+    #print-report .transcript-block {
+        border: 1px solid #d1d5db;
+        border-radius: 6pt;
+        padding: 10pt 12pt;
+        margin-top: 12pt;
+        font-size: 9pt;
+        white-space: pre-wrap;
+        max-height: 300pt;
+        overflow: hidden;
+    }
+
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+}
+
+/* Screen-only helper: hide print report on screen */
+@media screen {
+    .print-only { display: none !important; }
+}

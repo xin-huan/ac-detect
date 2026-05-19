@@ -2,6 +2,8 @@ from collections import defaultdict
 from flask import Blueprint, request, jsonify
 from werkzeug.utils import secure_filename
 import os
+import json
+import time
 import traceback
 from pathlib import Path
 
@@ -45,6 +47,50 @@ def _get_all_enrolled_names_safe() -> list:
         return list(load_saved_vectors().keys())
     except Exception:
         return []
+
+
+REPORTS_INDEX_FILE = os.path.join('result', '_reports_index.json')
+
+
+def _load_history_index() -> list:
+    """加载历史报告索引"""
+    if os.path.exists(REPORTS_INDEX_FILE):
+        try:
+            with open(REPORTS_INDEX_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception:
+            return []
+    return []
+
+
+def _save_history_index(index: list) -> None:
+    """保存历史报告索引"""
+    os.makedirs('result', exist_ok=True)
+    with open(REPORTS_INDEX_FILE, 'w', encoding='utf-8') as f:
+        json.dump(index, f, ensure_ascii=False, indent=2)
+
+
+def _save_report(video_name: str, result: dict) -> None:
+    """将分析报告持久化到磁盘"""
+    report_dir = os.path.join('result', video_name)
+    os.makedirs(report_dir, exist_ok=True)
+    report_path = os.path.join(report_dir, 'analysis_report.json')
+    with open(report_path, 'w', encoding='utf-8') as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+
+    # 更新索引
+    index = _load_history_index()
+    # 移除同一视频名的旧记录
+    index = [entry for entry in index if entry.get('video_name') != video_name]
+    index.insert(0, {
+        'video_name': video_name,
+        'timestamp': time.time(),
+        'average_score': result.get('summary', {}).get('average_score', 0),
+        'student_count': len(result.get('students', [])),
+        'attendance_total': result.get('summary', {}).get('attendance', {}).get('total', 0),
+        'attendance_present': len(result.get('summary', {}).get('attendance', {}).get('present', [])),
+    })
+    _save_history_index(index)
 
 
 @integrated_bp.route('/analyze', methods=['POST'])
@@ -140,17 +186,26 @@ def analyze_video_integrated():
             students_report.sort(key=lambda s: s["concentration_score"], reverse=True)
             total_enrolled = len(students_report)
 
+        result = {
+            "summary": {
+                "attendance": {"present": actual_present, "total": total_enrolled},
+                "average_score": round(overall_score * 100),
+                "full_transcript": transcript_content,
+            },
+            "students": students_report,
+        }
+
+        # 持久化保存报告
+        try:
+            video_basename = os.path.splitext(filename)[0]
+            _save_report(video_basename, result)
+        except Exception as save_err:
+            print(f"[WARNING] 报告持久化失败: {save_err}")
+
         return jsonify({
             "status": "success",
             "message": "Integrated analysis successful.",
-            "result": {
-                "summary": {
-                    "attendance": {"present": actual_present, "total": total_enrolled},
-                    "average_score": round(overall_score * 100),
-                    "full_transcript": transcript_content,
-                },
-                "students": students_report,
-            },
+            "result": result,
         })
 
     except Exception as e:
@@ -162,3 +217,42 @@ def analyze_video_integrated():
             os.remove(temp_video_path)
         if transcript_path and transcript_path.exists():
             transcript_path.unlink()
+
+
+@integrated_bp.route('/history', methods=['GET'])
+def list_history():
+    """列出所有历史分析报告"""
+    try:
+        index = _load_history_index()
+        return jsonify({"status": "success", "reports": index}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@integrated_bp.route('/report/<video_name>', methods=['GET'])
+def get_report(video_name):
+    """获取指定视频的历史分析报告"""
+    try:
+        report_path = os.path.join('result', video_name, 'analysis_report.json')
+        if not os.path.exists(report_path):
+            return jsonify({"status": "error", "message": "Report not found"}), 404
+        with open(report_path, 'r', encoding='utf-8') as f:
+            return jsonify({"status": "success", "result": json.load(f)}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@integrated_bp.route('/report/<video_name>', methods=['DELETE'])
+def delete_report(video_name):
+    """删除历史分析报告"""
+    try:
+        import shutil
+        report_dir = os.path.join('result', video_name)
+        if os.path.exists(report_dir):
+            shutil.rmtree(report_dir)
+        index = _load_history_index()
+        index = [e for e in index if e.get('video_name') != video_name]
+        _save_history_index(index)
+        return jsonify({"status": "success", "message": f"Report '{video_name}' deleted"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
